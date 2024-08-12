@@ -58,8 +58,8 @@ func validatePhoneNumber(input *string) (validPhoneNumber string, errorList []st
 	}
 
 	// Check the length of the phone number
-	if len(phoneNumber) < 10 || len(phoneNumber) > 13 {
-		errorList = append(errorList, "phone_number should be 10 to 13 digits")
+	if len(phoneNumber) < 10 || len(phoneNumber) > 14 {
+		errorList = append(errorList, "phone_number should be 10 to 14 digits (+62 inclusive)")
 	}
 
 	// Check if all remaining characters are digits

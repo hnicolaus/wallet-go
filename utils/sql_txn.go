@@ -7,6 +7,8 @@ import (
 	"github.com/WalletService/repository"
 )
 
+// WithDbTx executes the provided function in a single DB txn.
+// fn is expected to contain all the operations that need to be performed within a single DB txn.
 func WithDbTx(ctx context.Context, dbTxnRepo repository.DbTxnRepoInterface, fn func(ctx context.Context) error) error {
 	// Revert back to the original *sql.DB Executor after the txn commit/rollback
 	db, err := dbTxnRepo.GetSqlDb()

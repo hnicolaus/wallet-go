@@ -11,8 +11,8 @@ CREATE TABLE "user" (
   CONSTRAINT balance_non_negative CHECK (balance >= 0)
 );
 
-INSERT INTO "user" (full_name, phone_number, "password", balance) VALUES ('name1', '+6281234567890', 'password1', 0);
-INSERT INTO "user" (full_name, phone_number, "password", balance) VALUES ('name2', '+6289876543210', 'password2', 0);
+INSERT INTO "user" (full_name, phone_number, "password", balance) VALUES ('name1', '+6281122334455', '$2a$12$3gbfndmoRHh9k0qNlHL78e1tXEFceJqxFKWGKz92D2ibtVt91niM6', 0);
+INSERT INTO "user" (full_name, phone_number, "password", balance) VALUES ('name2', '+6285544332211', '$2a$12$3gbfndmoRHh9k0qNlHL78e1tXEFceJqxFKWGKz92D2ibtVt91niM6', 10000000);
 
 CREATE TABLE transaction (
     id UUID PRIMARY KEY,
