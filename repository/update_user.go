@@ -11,7 +11,7 @@ import (
 	"github.com/WalletService/model"
 )
 
-func (r *Repository) UpdateUser(ctx context.Context, in model.User) error {
+func (r *Repository) UpdateUser(ctx context.Context, in model.UpdateUserRequest) error {
 	var (
 		query     string
 		setFields []string
@@ -19,29 +19,19 @@ func (r *Repository) UpdateUser(ctx context.Context, in model.User) error {
 		offset    int = 0
 	)
 
-	if in.PhoneNumber != "" {
-		setFields = append(setFields, fmt.Sprintf(setUserPhoneNumberF, offset+1))
-		params = append(
-			params,
-			in.PhoneNumber,
-		)
-		offset++
-	}
+	if in.Balance != (model.UpdateBalanceRequest{}) {
+		switch in.Balance.Type {
+		case model.UpdateBalanceIncrement:
+			setFields = append(setFields, fmt.Sprintf(incrementUserBalanceF, offset+1))
+		case model.UpdateBalanceDecrement:
+			setFields = append(setFields, fmt.Sprintf(decrementUserBalanceF, offset+1))
 
-	if in.FullName != "" {
-		setFields = append(setFields, fmt.Sprintf(setUserFullNameF, offset+1))
+		default:
+			return errors.New("unknow balance update type")
+		}
 		params = append(
 			params,
-			in.FullName,
-		)
-		offset++
-	}
-
-	if in.Balance > 0 {
-		setFields = append(setFields, fmt.Sprintf(setUserBalanceF, offset+1))
-		params = append(
-			params,
-			in.Balance,
+			in.Balance.Amount,
 		)
 		offset++
 	}
@@ -58,7 +48,7 @@ func (r *Repository) UpdateUser(ctx context.Context, in model.User) error {
 	query += fmt.Sprintf(whereUserID, offset+1)
 	params = append(
 		params,
-		in.ID,
+		in.UserID,
 	)
 	offset++
 

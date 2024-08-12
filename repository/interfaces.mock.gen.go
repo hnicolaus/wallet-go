@@ -125,17 +125,17 @@ func (mr *MockRepositoryInterfaceMockRecorder) SetExecutor(executor interface{})
 }
 
 // UpdateUser mocks base method.
-func (m *MockRepositoryInterface) UpdateUser(ctx context.Context, user model.User) error {
+func (m *MockRepositoryInterface) UpdateUser(ctx context.Context, request model.UpdateUserRequest) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "UpdateUser", ctx, user)
+	ret := m.ctrl.Call(m, "UpdateUser", ctx, request)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
 
 // UpdateUser indicates an expected call of UpdateUser.
-func (mr *MockRepositoryInterfaceMockRecorder) UpdateUser(ctx, user interface{}) *gomock.Call {
+func (mr *MockRepositoryInterfaceMockRecorder) UpdateUser(ctx, request interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateUser", reflect.TypeOf((*MockRepositoryInterface)(nil).UpdateUser), ctx, user)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateUser", reflect.TypeOf((*MockRepositoryInterface)(nil).UpdateUser), ctx, request)
 }
 
 // MockExecutor is a mock of Executor interface.
@@ -268,4 +268,211 @@ func (m *MockDbTxnRepoInterface) SetExecutor(executor Executor) {
 func (mr *MockDbTxnRepoInterfaceMockRecorder) SetExecutor(executor interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SetExecutor", reflect.TypeOf((*MockDbTxnRepoInterface)(nil).SetExecutor), executor)
+}
+
+// MockSqlDbInterface is a mock of SqlDbInterface interface.
+type MockSqlDbInterface struct {
+	ctrl     *gomock.Controller
+	recorder *MockSqlDbInterfaceMockRecorder
+}
+
+// MockSqlDbInterfaceMockRecorder is the mock recorder for MockSqlDbInterface.
+type MockSqlDbInterfaceMockRecorder struct {
+	mock *MockSqlDbInterface
+}
+
+// NewMockSqlDbInterface creates a new mock instance.
+func NewMockSqlDbInterface(ctrl *gomock.Controller) *MockSqlDbInterface {
+	mock := &MockSqlDbInterface{ctrl: ctrl}
+	mock.recorder = &MockSqlDbInterfaceMockRecorder{mock}
+	return mock
+}
+
+// EXPECT returns an object that allows the caller to indicate expected use.
+func (m *MockSqlDbInterface) EXPECT() *MockSqlDbInterfaceMockRecorder {
+	return m.recorder
+}
+
+// BeginTx mocks base method.
+func (m *MockSqlDbInterface) BeginTx(ctx context.Context, opts *sql.TxOptions) (*sql.Tx, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "BeginTx", ctx, opts)
+	ret0, _ := ret[0].(*sql.Tx)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// BeginTx indicates an expected call of BeginTx.
+func (mr *MockSqlDbInterfaceMockRecorder) BeginTx(ctx, opts interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "BeginTx", reflect.TypeOf((*MockSqlDbInterface)(nil).BeginTx), ctx, opts)
+}
+
+// ExecContext mocks base method.
+func (m *MockSqlDbInterface) ExecContext(ctx context.Context, query string, args ...interface{}) (sql.Result, error) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{ctx, query}
+	for _, a := range args {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "ExecContext", varargs...)
+	ret0, _ := ret[0].(sql.Result)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// ExecContext indicates an expected call of ExecContext.
+func (mr *MockSqlDbInterfaceMockRecorder) ExecContext(ctx, query interface{}, args ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{ctx, query}, args...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ExecContext", reflect.TypeOf((*MockSqlDbInterface)(nil).ExecContext), varargs...)
+}
+
+// QueryContext mocks base method.
+func (m *MockSqlDbInterface) QueryContext(ctx context.Context, query string, args ...interface{}) (*sql.Rows, error) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{ctx, query}
+	for _, a := range args {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "QueryContext", varargs...)
+	ret0, _ := ret[0].(*sql.Rows)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// QueryContext indicates an expected call of QueryContext.
+func (mr *MockSqlDbInterfaceMockRecorder) QueryContext(ctx, query interface{}, args ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{ctx, query}, args...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "QueryContext", reflect.TypeOf((*MockSqlDbInterface)(nil).QueryContext), varargs...)
+}
+
+// QueryRowContext mocks base method.
+func (m *MockSqlDbInterface) QueryRowContext(ctx context.Context, query string, args ...interface{}) *sql.Row {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{ctx, query}
+	for _, a := range args {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "QueryRowContext", varargs...)
+	ret0, _ := ret[0].(*sql.Row)
+	return ret0
+}
+
+// QueryRowContext indicates an expected call of QueryRowContext.
+func (mr *MockSqlDbInterfaceMockRecorder) QueryRowContext(ctx, query interface{}, args ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{ctx, query}, args...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "QueryRowContext", reflect.TypeOf((*MockSqlDbInterface)(nil).QueryRowContext), varargs...)
+}
+
+// MockSqlTxInterface is a mock of SqlTxInterface interface.
+type MockSqlTxInterface struct {
+	ctrl     *gomock.Controller
+	recorder *MockSqlTxInterfaceMockRecorder
+}
+
+// MockSqlTxInterfaceMockRecorder is the mock recorder for MockSqlTxInterface.
+type MockSqlTxInterfaceMockRecorder struct {
+	mock *MockSqlTxInterface
+}
+
+// NewMockSqlTxInterface creates a new mock instance.
+func NewMockSqlTxInterface(ctrl *gomock.Controller) *MockSqlTxInterface {
+	mock := &MockSqlTxInterface{ctrl: ctrl}
+	mock.recorder = &MockSqlTxInterfaceMockRecorder{mock}
+	return mock
+}
+
+// EXPECT returns an object that allows the caller to indicate expected use.
+func (m *MockSqlTxInterface) EXPECT() *MockSqlTxInterfaceMockRecorder {
+	return m.recorder
+}
+
+// Commit mocks base method.
+func (m *MockSqlTxInterface) Commit() error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Commit")
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// Commit indicates an expected call of Commit.
+func (mr *MockSqlTxInterfaceMockRecorder) Commit() *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Commit", reflect.TypeOf((*MockSqlTxInterface)(nil).Commit))
+}
+
+// ExecContext mocks base method.
+func (m *MockSqlTxInterface) ExecContext(ctx context.Context, query string, args ...interface{}) (sql.Result, error) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{ctx, query}
+	for _, a := range args {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "ExecContext", varargs...)
+	ret0, _ := ret[0].(sql.Result)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// ExecContext indicates an expected call of ExecContext.
+func (mr *MockSqlTxInterfaceMockRecorder) ExecContext(ctx, query interface{}, args ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{ctx, query}, args...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ExecContext", reflect.TypeOf((*MockSqlTxInterface)(nil).ExecContext), varargs...)
+}
+
+// QueryContext mocks base method.
+func (m *MockSqlTxInterface) QueryContext(ctx context.Context, query string, args ...interface{}) (*sql.Rows, error) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{ctx, query}
+	for _, a := range args {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "QueryContext", varargs...)
+	ret0, _ := ret[0].(*sql.Rows)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// QueryContext indicates an expected call of QueryContext.
+func (mr *MockSqlTxInterfaceMockRecorder) QueryContext(ctx, query interface{}, args ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{ctx, query}, args...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "QueryContext", reflect.TypeOf((*MockSqlTxInterface)(nil).QueryContext), varargs...)
+}
+
+// QueryRowContext mocks base method.
+func (m *MockSqlTxInterface) QueryRowContext(ctx context.Context, query string, args ...interface{}) *sql.Row {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{ctx, query}
+	for _, a := range args {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "QueryRowContext", varargs...)
+	ret0, _ := ret[0].(*sql.Row)
+	return ret0
+}
+
+// QueryRowContext indicates an expected call of QueryRowContext.
+func (mr *MockSqlTxInterfaceMockRecorder) QueryRowContext(ctx, query interface{}, args ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{ctx, query}, args...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "QueryRowContext", reflect.TypeOf((*MockSqlTxInterface)(nil).QueryRowContext), varargs...)
+}
+
+// Rollback mocks base method.
+func (m *MockSqlTxInterface) Rollback() error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Rollback")
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// Rollback indicates an expected call of Rollback.
+func (mr *MockSqlTxInterfaceMockRecorder) Rollback() *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Rollback", reflect.TypeOf((*MockSqlTxInterface)(nil).Rollback))
 }

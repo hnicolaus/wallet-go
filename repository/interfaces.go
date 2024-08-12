@@ -17,7 +17,7 @@ type RepositoryInterface interface {
 	GetUsers(ctx context.Context, request model.UserFilter) (users []model.User, err error)
 	GetUser(ctx context.Context, userID int64) (user model.User, err error)
 	InsertTransaction(ctx context.Context, transaction model.Transaction) (transactionID uuid.UUID, err error)
-	UpdateUser(ctx context.Context, user model.User) error
+	UpdateUser(ctx context.Context, request model.UpdateUserRequest) error
 	DbTxnRepoInterface // to enable using db txn
 }
 
@@ -30,4 +30,15 @@ type Executor interface {
 type DbTxnRepoInterface interface {
 	GetSqlDb() (*sql.DB, error)
 	SetExecutor(executor Executor)
+}
+
+type SqlDbInterface interface {
+	BeginTx(ctx context.Context, opts *sql.TxOptions) (*sql.Tx, error)
+	Executor
+}
+
+type SqlTxInterface interface {
+	Rollback() error
+	Commit() error
+	Executor
 }

@@ -74,12 +74,24 @@ func (uc *Usecase) performTransferOut(ctx context.Context, user model.User, tran
 	// 3. Insert Transaction record
 	if err = utils.WithDbTx(context.Background(), uc.Repository, func(ctx context.Context) error {
 		// Subtract User's balance
-		if err := uc.Repository.UpdateUser(ctx, user); err != nil {
+		if err := uc.Repository.UpdateUser(ctx, model.UpdateUserRequest{
+			UserID: user.ID,
+			Balance: model.UpdateBalanceRequest{
+				Amount: transaction.Amount,
+				Type:   model.UpdateBalanceDecrement,
+			},
+		}); err != nil {
 			return err
 		}
 
 		// Increment Recipient's balance
-		if err := uc.Repository.UpdateUser(ctx, recipient); err != nil {
+		if err := uc.Repository.UpdateUser(ctx, model.UpdateUserRequest{
+			UserID: recipient.ID,
+			Balance: model.UpdateBalanceRequest{
+				Amount: transaction.Amount,
+				Type:   model.UpdateBalanceIncrement,
+			},
+		}); err != nil {
 			return err
 		}
 
@@ -111,8 +123,14 @@ func (uc *Usecase) performTopUp(ctx context.Context, user model.User, transactio
 	// 1. Increment User's balance
 	// 2. Insert Transaction record
 	if err = utils.WithDbTx(context.Background(), uc.Repository, func(ctx context.Context) error {
-		// Update User's balance
-		if err := uc.Repository.UpdateUser(ctx, user); err != nil {
+		// Increment User's balance
+		if err := uc.Repository.UpdateUser(ctx, model.UpdateUserRequest{
+			UserID: user.ID,
+			Balance: model.UpdateBalanceRequest{
+				Amount: transaction.Amount,
+				Type:   model.UpdateBalanceIncrement,
+			},
+		}); err != nil {
 			return err
 		}
 

@@ -13,11 +13,10 @@ var (
 )
 
 var (
-	queryUpdateUserF    = "UPDATE \"user\" SET %s WHERE TRUE"
-	setUserPhoneNumberF = "phone_number = $%d"
-	setUserFullNameF    = "full_name = $%d"
-	setUserUpdatedTimeF = "updated_time = $%d"
-	setUserBalanceF     = "balance = $%d"
+	queryUpdateUserF      = "UPDATE \"user\" SET %s WHERE TRUE"
+	incrementUserBalanceF = "balance = balance + $%d"
+	decrementUserBalanceF = "balance = balance - $%d"
+	setUserUpdatedTimeF   = "updated_time = $%d"
 )
 
 var (

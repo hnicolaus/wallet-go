@@ -48,3 +48,20 @@ type Transaction struct {
 	Description string            `json:"description" db:"description"`
 	Password    string
 }
+
+type UpdateBalanceType string
+
+const (
+	UpdateBalanceIncrement UpdateBalanceType = "Increment"
+	UpdateBalanceDecrement UpdateBalanceType = "Decrement"
+)
+
+type UpdateUserRequest struct {
+	UserID  int64
+	Balance UpdateBalanceRequest
+}
+
+type UpdateBalanceRequest struct {
+	Amount float32
+	Type   UpdateBalanceType
+}

@@ -7,7 +7,8 @@ CREATE TABLE "user" (
   created_time timestamp NOT NULL default now(),
   updated_time timestamp,
   successful_login_count int not null default 0,
-  CONSTRAINT user_phone_number_uniquekey UNIQUE (phone_number)
+  CONSTRAINT user_phone_number_uniquekey UNIQUE (phone_number),
+  CONSTRAINT balance_non_negative CHECK (balance >= 0)
 );
 
 INSERT INTO "user" (full_name, phone_number, "password", balance) VALUES ('name1', '+6281234567890', 'password1', 0);
