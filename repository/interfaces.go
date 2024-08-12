@@ -18,6 +18,7 @@ type RepositoryInterface interface {
 	GetUser(ctx context.Context, userID int64) (user model.User, err error)
 	InsertTransaction(ctx context.Context, transaction model.Transaction) (transactionID uuid.UUID, err error)
 	UpdateUser(ctx context.Context, request model.UpdateUserRequest) error
+	LockUser(ctx context.Context, userID int64) error
 	DbTxnRepoInterface // to enable using db txn
 }
 

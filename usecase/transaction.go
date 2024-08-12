@@ -68,12 +68,14 @@ func (uc *Usecase) performTransferOut(ctx context.Context, user model.User, tran
 	// Increment Recipient's balance
 	recipient.Balance = recipient.Balance + transaction.Amount
 
-	// Perform the following in a single DB transaction to ensure atomicity of TransferOut operation:
-	// 1. Subtract User's balance
-	// 2. Increment Recipient's balance
-	// 3. Insert Transaction record
+	// Perform the following in a single DB transaction to ensure atomicity of all TransferOut operations
 	if err = utils.WithDbTx(context.Background(), uc.Repository, func(ctx context.Context) error {
-		// Subtract User's balance
+		// 1. Lock User data to prevent race condition
+		if err := uc.Repository.LockUser(ctx, user.ID); err != nil {
+			return err
+		}
+
+		// 2. Subtract User's balance
 		if err := uc.Repository.UpdateUser(ctx, model.UpdateUserRequest{
 			UserID: user.ID,
 			Balance: model.UpdateBalanceRequest{
@@ -84,7 +86,12 @@ func (uc *Usecase) performTransferOut(ctx context.Context, user model.User, tran
 			return err
 		}
 
-		// Increment Recipient's balance
+		// 3. Lock Recipient data to prevent race condition
+		if err := uc.Repository.LockUser(ctx, recipient.ID); err != nil {
+			return err
+		}
+
+		// 4. Increment Recipient's balance
 		if err := uc.Repository.UpdateUser(ctx, model.UpdateUserRequest{
 			UserID: recipient.ID,
 			Balance: model.UpdateBalanceRequest{
@@ -95,7 +102,7 @@ func (uc *Usecase) performTransferOut(ctx context.Context, user model.User, tran
 			return err
 		}
 
-		// Insert a Successful Transaction record
+		// 5. Insert a Successful Transaction record
 		transaction.Status = model.TransactionStatusSuccessful
 		if newTransactionID, err = uc.Repository.InsertTransaction(ctx, transaction); err != nil {
 			return err
@@ -104,7 +111,9 @@ func (uc *Usecase) performTransferOut(ctx context.Context, user model.User, tran
 	}); err != nil {
 		// Insert a Failed transaction record if failed
 		transaction.Status = model.TransactionStatusFailed
-		go uc.Repository.InsertTransaction(ctx, transaction) // fire and forget because a Failed log are equal to no log
+
+		// Fire and forget because a Failed log for a TransferOut operation is equal to no log
+		go uc.Repository.InsertTransaction(ctx, transaction)
 
 		return uuid.Nil, err
 	}
@@ -119,11 +128,14 @@ func (uc *Usecase) performTopUp(ctx context.Context, user model.User, transactio
 	// Set RecipientID to User's ID for TopUp Transaction
 	transaction.RecipientID = user.ID
 
-	// Perform the following in a single DB transaction to ensure atomicity of Deposit operation:
-	// 1. Increment User's balance
-	// 2. Insert Transaction record
+	// Perform the following in a single DB transaction to ensure atomicity of all TopUp operations
 	if err = utils.WithDbTx(context.Background(), uc.Repository, func(ctx context.Context) error {
-		// Increment User's balance
+		// 1. Lock User data to prevent race condition
+		if err := uc.Repository.LockUser(ctx, user.ID); err != nil {
+			return err
+		}
+
+		// 2. Increment User's balance
 		if err := uc.Repository.UpdateUser(ctx, model.UpdateUserRequest{
 			UserID: user.ID,
 			Balance: model.UpdateBalanceRequest{
@@ -134,7 +146,7 @@ func (uc *Usecase) performTopUp(ctx context.Context, user model.User, transactio
 			return err
 		}
 
-		// Insert a Successful Transaction record
+		// 3. Insert a Successful Transaction record
 		transaction.Status = model.TransactionStatusSuccessful
 		if newTransactionID, err = uc.Repository.InsertTransaction(ctx, transaction); err != nil {
 			return err

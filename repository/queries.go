@@ -22,3 +22,7 @@ var (
 var (
 	queryInsertTransaction = "INSERT INTO transaction(id, user_id, amount, type, recipient_id, status, description, created_time) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING id"
 )
+
+var (
+	queryLockUser = "SELECT balance from \"user\" WHERE id = $1 FOR UPDATE"
+)
