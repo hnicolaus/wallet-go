@@ -19,18 +19,23 @@ func NewRepository(dbUrl string) *Repository {
 	if err != nil {
 		panic(err)
 	}
+
+	sqlDb := &SqlDb{
+		db: db,
+	}
+
 	return &Repository{
-		exec: db,
+		exec: sqlDb,
 	}
 }
 
-func (r *Repository) GetSqlDb() (*sql.DB, error) {
+func (r *Repository) GetSqlDb() (SqlDbInterface, error) {
 	var (
-		sqlDb *sql.DB
+		sqlDb *SqlDb
 		ok    bool
 	)
 
-	if sqlDb, ok = r.exec.(*sql.DB); !ok {
+	if sqlDb, ok = r.exec.(*SqlDb); !ok {
 		return nil, errors.New("exec is not a sqlDb")
 	}
 

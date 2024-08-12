@@ -29,12 +29,12 @@ type Executor interface {
 }
 
 type DbTxnRepoInterface interface {
-	GetSqlDb() (*sql.DB, error)
+	GetSqlDb() (SqlDbInterface, error)
 	SetExecutor(executor Executor)
 }
 
 type SqlDbInterface interface {
-	BeginTx(ctx context.Context, opts *sql.TxOptions) (*sql.Tx, error)
+	BeginTx(ctx context.Context, opts *sql.TxOptions) (SqlTxInterface, error)
 	Executor
 }
 

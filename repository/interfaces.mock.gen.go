@@ -38,10 +38,10 @@ func (m *MockRepositoryInterface) EXPECT() *MockRepositoryInterfaceMockRecorder 
 }
 
 // GetSqlDb mocks base method.
-func (m *MockRepositoryInterface) GetSqlDb() (*sql.DB, error) {
+func (m *MockRepositoryInterface) GetSqlDb() (SqlDbInterface, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetSqlDb")
-	ret0, _ := ret[0].(*sql.DB)
+	ret0, _ := ret[0].(SqlDbInterface)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -110,6 +110,20 @@ func (m *MockRepositoryInterface) InsertUser(ctx context.Context, user model.Use
 func (mr *MockRepositoryInterfaceMockRecorder) InsertUser(ctx, user interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "InsertUser", reflect.TypeOf((*MockRepositoryInterface)(nil).InsertUser), ctx, user)
+}
+
+// LockUser mocks base method.
+func (m *MockRepositoryInterface) LockUser(ctx context.Context, userID int64) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "LockUser", ctx, userID)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// LockUser indicates an expected call of LockUser.
+func (mr *MockRepositoryInterfaceMockRecorder) LockUser(ctx, userID interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "LockUser", reflect.TypeOf((*MockRepositoryInterface)(nil).LockUser), ctx, userID)
 }
 
 // SetExecutor mocks base method.
@@ -244,10 +258,10 @@ func (m *MockDbTxnRepoInterface) EXPECT() *MockDbTxnRepoInterfaceMockRecorder {
 }
 
 // GetSqlDb mocks base method.
-func (m *MockDbTxnRepoInterface) GetSqlDb() (*sql.DB, error) {
+func (m *MockDbTxnRepoInterface) GetSqlDb() (SqlDbInterface, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetSqlDb")
-	ret0, _ := ret[0].(*sql.DB)
+	ret0, _ := ret[0].(SqlDbInterface)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -294,10 +308,10 @@ func (m *MockSqlDbInterface) EXPECT() *MockSqlDbInterfaceMockRecorder {
 }
 
 // BeginTx mocks base method.
-func (m *MockSqlDbInterface) BeginTx(ctx context.Context, opts *sql.TxOptions) (*sql.Tx, error) {
+func (m *MockSqlDbInterface) BeginTx(ctx context.Context, opts *sql.TxOptions) (SqlTxInterface, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "BeginTx", ctx, opts)
-	ret0, _ := ret[0].(*sql.Tx)
+	ret0, _ := ret[0].(SqlTxInterface)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }

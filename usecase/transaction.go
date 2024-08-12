@@ -62,12 +62,6 @@ func (uc *Usecase) performTransferOut(ctx context.Context, user model.User, tran
 		return uuid.Nil, err
 	}
 
-	// Subtract Users's balance
-	user.Balance = user.Balance - transaction.Amount
-
-	// Increment Recipient's balance
-	recipient.Balance = recipient.Balance + transaction.Amount
-
 	// Perform the following in a single DB transaction to ensure atomicity of all TransferOut operations
 	if err = utils.WithDbTx(context.Background(), uc.Repository, func(ctx context.Context) error {
 		// 1. Lock User data to prevent race condition
@@ -104,6 +98,7 @@ func (uc *Usecase) performTransferOut(ctx context.Context, user model.User, tran
 
 		// 5. Insert a Successful Transaction record
 		transaction.Status = model.TransactionStatusSuccessful
+		transaction.Password = ""
 		if newTransactionID, err = uc.Repository.InsertTransaction(ctx, transaction); err != nil {
 			return err
 		}
@@ -111,9 +106,9 @@ func (uc *Usecase) performTransferOut(ctx context.Context, user model.User, tran
 	}); err != nil {
 		// Insert a Failed transaction record if failed
 		transaction.Status = model.TransactionStatusFailed
+		transaction.Password = ""
 
-		// Fire and forget because a Failed log for a TransferOut operation is equal to no log
-		go uc.Repository.InsertTransaction(ctx, transaction)
+		uc.Repository.InsertTransaction(ctx, transaction)
 
 		return uuid.Nil, err
 	}
@@ -148,6 +143,9 @@ func (uc *Usecase) performTopUp(ctx context.Context, user model.User, transactio
 
 		// 3. Insert a Successful Transaction record
 		transaction.Status = model.TransactionStatusSuccessful
+		transaction.Password = ""
+		transaction.RecipientID = transaction.UserID
+
 		if newTransactionID, err = uc.Repository.InsertTransaction(ctx, transaction); err != nil {
 			return err
 		}
@@ -155,6 +153,8 @@ func (uc *Usecase) performTopUp(ctx context.Context, user model.User, transactio
 	}); err != nil {
 		// Insert a Failed transaction record if failed
 		transaction.Status = model.TransactionStatusFailed
+		transaction.Password = ""
+
 		uc.Repository.InsertTransaction(ctx, transaction)
 
 		return uuid.Nil, err
